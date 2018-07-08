@@ -170,7 +170,7 @@ public class Example1 {
         assertEquals(expected, personByLastName);
     }
 
-    private Person[] getPersons() {
+    public static Person[] getPersons() {
         return new Person[]{
             new Person("Иван", "Мельников", 20),
             new Person("Алексей", "Доренко", 40),

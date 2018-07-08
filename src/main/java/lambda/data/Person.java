@@ -38,8 +38,9 @@ public class Person implements Serializable {
         return firstName;
     }
 
+    // () -> String
+    // Person -> String
     public String getLastName() {
-        System.out.println("without param");
         return this.lastName;
     }
 

@@ -81,6 +81,7 @@ class Person {
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 class Student extends Person {
 
     int year;

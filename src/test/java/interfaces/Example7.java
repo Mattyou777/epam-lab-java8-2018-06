@@ -1,6 +1,6 @@
 package interfaces;
 
-import org.openjdk.jol.info.ClassLayout;
+//import org.openjdk.jol.info.ClassLayout;
 
 // TODO Java Object Layout
 public class Example7 {
@@ -12,8 +12,8 @@ public class Example7 {
         // int - 4 bytes
         // padding - 0 bytes
 
-        ClassLayout layout = ClassLayout.parseInstance("123");
-        System.out.println(layout.toPrintable());
+//        ClassLayout layout = ClassLayout.parseInstance("123");
+//        System.out.println(layout.toPrintable());
 
     }
 }

@@ -43,7 +43,7 @@ public class Example11 {
     private final String str = "123";
 
     private Supplier<String> getString() {
-        return () -> this.str;
+        return () -> str;
     }
 
     @Test

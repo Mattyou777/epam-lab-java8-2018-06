@@ -9,6 +9,9 @@ import java.util.function.Supplier;
 
 import static org.junit.Assert.assertEquals;
 
+/**
+ * @see <a href="https://www.ibm.com/developerworks/library/j-java8idioms10/index.html">Java8 lambdas and closures</a>
+ */
 @SuppressWarnings({"Convert2Lambda", "Anonymous2MethodRef", "Convert2MethodRef"})
 public class Example4 {
 
