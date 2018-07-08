@@ -39,7 +39,9 @@ public class Exercise2 {
          * @param mapping Функция преобразования элементов.
          */
         public <R> MapHelper<R> map(Function<T, R> mapping) {
-            throw new UnsupportedOperationException();
+            List<R> mapped = new ArrayList<>();
+            source.forEach(element -> mapped.add(mapping.apply(element)));
+            return new MapHelper<>(mapped);
         }
 
         /**
@@ -49,7 +51,9 @@ public class Exercise2 {
          * @param flatMapping Функция преобразования элементов.
          */
         public <R> MapHelper<R> flatMap(Function<T, List<R>> flatMapping) {
-            throw new UnsupportedOperationException();
+            List<R> mapped = new ArrayList<>();
+            source.forEach(element -> mapped.addAll(flatMapping.apply(element)));
+            return new MapHelper<>(mapped);
         }
     }
 
@@ -57,12 +61,16 @@ public class Exercise2 {
     public void mapEmployeesToLengthOfTheirFullNamesUsingMapHelper() {
         List<Employee> employees = getEmployees();
 
-        List<Integer> lengths = null;
-        // TODO                 MapHelper.from(employees)
-        // TODO                          .map(Employee -> Person)
-        // TODO                          .map(Person -> String(full name))
-        // TODO                          .map(String -> Integer(length of string))
-        // TODO                          .getMapped();
+        List<Integer> lengths = MapHelper.from(employees)
+            .map(Employee::getPerson)
+            .map(Person::getFullName)
+            .map(String::length)
+            .getMapped();
+        //                  MapHelper.from(employees)
+        //                           .map(Employee -> Person)
+        //                           .map(Person -> String(full name))
+        //                           .map(String -> Integer(length of string))
+        //                           .getMapped();
         assertEquals(Arrays.asList(14, 19, 14, 15, 14, 16), lengths);
     }
 
@@ -70,14 +78,31 @@ public class Exercise2 {
     public void mapEmployeesToCodesOfLetterTheirPositionsUsingMapHelper() {
         List<Employee> employees = getEmployees();
 
-        List<Integer> codes = null;
-        // TODO               MapHelper.from(employees)
-        // TODO                        .flatMap(Employee -> JobHistoryEntry)
-        // TODO                        .map(JobHistoryEntry -> String(position))
-        // TODO                        .flatMap(String -> Character(letter))
-        // TODO                        .map(Character -> Integer(code letter)
-        // TODO                        .getMapped();
+        List<Integer> codes = MapHelper.from(employees)
+            .flatMap(Employee::getJobHistory)
+            .map(JobHistoryEntry::getPosition)
+            .flatMap(Exercise2::extractCharacters)
+            .map(Exercise2::extractCode)
+            .getMapped();
+        //                MapHelper.from(employees)
+        //                         .flatMap(Employee -> JobHistoryEntry)
+        //                         .map(JobHistoryEntry -> String(position))
+        //                         .flatMap(String -> Character(letter))
+        //                         .map(Character -> Integer(code letter)
+        //                         .getMapped();
         assertEquals(calcCodes("dev", "dev", "tester", "dev", "dev", "QA", "QA", "dev", "tester", "tester", "QA", "QA", "QA", "dev"), codes);
+    }
+
+    private static Integer extractCode(Character character) {
+        return (int) character;
+    }
+
+    private static List<Character> extractCharacters(String s) {
+        List<Character> list = new ArrayList<>(s.length());
+        for (char c : s.toCharArray()
+        ) {list.add(c);
+        }
+        return list;
     }
 
     private static List<Integer> calcCodes(String...strings) {
