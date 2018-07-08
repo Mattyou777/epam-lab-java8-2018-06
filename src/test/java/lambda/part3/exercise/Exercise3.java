@@ -1,5 +1,6 @@
 package lambda.part3.exercise;
 
+import java.util.ArrayList;
 import lambda.data.Employee;
 import lambda.data.JobHistoryEntry;
 import lambda.data.Person;
@@ -16,20 +17,27 @@ import static org.junit.Assert.assertEquals;
 public class Exercise3 {
 
     private static class LazyMapHelper<T, R> {
+      private final List<? extends T> source;
+      private Function<T, R> function;
 
-        public static <T> LazyMapHelper<T, T> from(List<T> list) {
-            // TODO реализация
-            throw new UnsupportedOperationException();
+      public LazyMapHelper(List<? extends T> source, Function<T, R> function) {
+        this.source = source;
+        this.function = function;
+      }
+
+
+      public static <T> LazyMapHelper<T, T> from(List<T> list) {
+            return new LazyMapHelper<>(list, el -> el);
         }
 
         public List<R> force() {
-            // TODO реализация
-            throw new UnsupportedOperationException();
+          List<R> result = new ArrayList<>(source.size());
+          source.forEach(element -> result.add(function.apply(element)));
+          return result;
         }
 
         public <R2> LazyMapHelper<T, R2> map(Function<R, R2> mapping) {
-            // TODO реализация
-            throw new UnsupportedOperationException();
+          return new LazyMapHelper<>(source, function.andThen(mapping));
         }
     }
 
@@ -37,12 +45,16 @@ public class Exercise3 {
     public void mapEmployeesToLengthOfTheirFullNamesUsingLazyMapHelper() {
         List<Employee> employees = getEmployees();
 
-        List<Integer> lengths = null;
-        // TODO                 LazyMapHelper.from(employees)
-        // TODO                              .map(Employee -> Person)
-        // TODO                              .map(Person -> String(full name))
-        // TODO                              .map(String -> Integer(length from string))
-        // TODO                              .getMapped();
+        List<Integer> lengths = LazyMapHelper.from(employees)
+            .map(Employee::getPerson)
+            .map(Person::getFullName)
+            .map(String::length)
+            .force();
+        //                  LazyMapHelper.from(employees)
+        //                               .map(Employee -> Person)
+        //                               .map(Person -> String(full name))
+        //                               .map(String -> Integer(length from string))
+        //                               .getMapped();
         assertEquals(Arrays.asList(14, 19, 14, 15, 14, 16), lengths);
     }
 
